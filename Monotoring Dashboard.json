@@ -1,0 +1,9 @@
+{
+  "dashboard": {
+    "title": "Telecom Services Dashboard",
+    "panels": [
+      {"title": "Billing API CPU", "targets": [{"expr": "rate(container_cpu_usage_seconds_total[5m])"}]},
+      {"title": "Billing API Requests", "targets": [{"expr": "rate(http_requests_total[5m])"}]}
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t billing-api:${BUILD_ID} docker/billing-api/'
+      }
+    }
+    stage('Blue-Green Deploy') {
+      steps {
+        sh '''
+          kubectl set image deployment/billing-api-blue billing-api=billing-api:${BUILD_ID} -n production
+          kubectl rollout status deployment/billing-api-blue -n production
+          kubectl patch service billing-api -p \'{"spec":{"selector":{"version":"blue"}}}\' -n production
+        '''
+      }
+    }
+  }
+}
